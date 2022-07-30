@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
-const WithAuth = (res, req, next) => {
-  const token = res.headers["x-access-token"];
+const WithAuth = (req, res, next) => {  
+  let token = req.headers['x-access-token'];
   if (!token) {
     res.status(401).json({ error: "Unauthorized: no token provided." });
   } else {
@@ -16,11 +16,11 @@ const WithAuth = (res, req, next) => {
       } else {
         req.email = decoded.email;
         User.findOne({ email: decoded.email })
-          .then((user) => {
-            req.user = user;
+          .then(user => { 
+            req.user = user;  
             next();
           })
-          .catch((err) => {
+          .catch(err => {
             res.status(401).json({ error: err });
           });
       }
